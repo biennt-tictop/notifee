@@ -552,6 +552,10 @@ public class NotificationAndroidModel {
     return mNotificationAndroidBundle.containsKey("style");
   }
 
+  public Boolean hasShortcut() {
+    return mNotificationAndroidBundle.containsKey("shortcutInfo");
+  }
+
   /**
    * Returns a task containing a notification style
    *
@@ -563,6 +567,14 @@ public class NotificationAndroidModel {
     }
 
     return NotificationAndroidStyleModel.fromBundle(mNotificationAndroidBundle.getBundle("style"));
+  }
+
+  public @Nullable NotificationAndroidShortcutModel getShortcutInfo() {
+    if (!hasShortcut()) {
+      return null;
+    }
+
+    return NotificationAndroidShortcutModel.fromBundle(mNotificationAndroidBundle.getBundle("shortcutInfo"));
   }
 
   /**

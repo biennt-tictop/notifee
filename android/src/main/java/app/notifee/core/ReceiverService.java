@@ -80,6 +80,30 @@ public class ReceiverService extends Service {
         context, uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
   }
 
+  public static Intent[] createNormalIntent(
+    String action, String[] extraKeys, Bundle... extraBundles) {
+    Context context = ContextHolder.getApplicationContext();
+    Intent intent = new Intent(context, ReceiverService.class);
+    intent.setAction(action);
+
+    for (int i = 0; i < extraKeys.length; i++) {
+      String key = extraKeys[i];
+
+      if (i <= extraBundles.length - 1) {
+        Bundle bundle = extraBundles[i];
+        intent.putExtra(key, bundle);
+      } else {
+        intent.putExtra(key, (String) null);
+      }
+    }
+
+    Intent[] intents;
+    intents = new Intent[1];
+    intents[0] = intent;
+
+    return intents;
+  }
+
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {

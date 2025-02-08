@@ -95,6 +95,7 @@ public class NotificationAndroidStyleModel {
             }
 
             if (personIconBitmap != null) {
+              personIconBitmap = ResourceUtils.getCircularBitmap(personIconBitmap);
               personBuilder.setIcon(IconCompat.createWithAdaptiveBitmap(personIconBitmap));
             }
           }

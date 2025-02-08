@@ -91,6 +91,52 @@ public class NotificationPendingIntent {
         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
   }
 
+  static Intent[] createNormalIntent(
+    int notificationId,
+    Bundle pressActionModelBundle,
+    int eventType,
+    String[] extraKeys,
+    Bundle... extraBundles) {
+    Context context = ContextHolder.getApplicationContext();
+
+    // Get launch activity intent
+    Intent launchActivityIntent = null;
+    if (pressActionModelBundle != null) {
+      launchActivityIntent =
+        createLaunchActivityIntent(
+          context,
+          notificationId,
+          NotificationAndroidPressActionModel.fromBundle(pressActionModelBundle));
+    }
+
+    // Create an activity to receive notification events
+    Intent receiverIntent = new Intent(context, NotificationReceiverActivity.class);
+
+    // Set extras for each intent
+    setIntentExtras(launchActivityIntent, eventType, notificationId, extraKeys, extraBundles);
+    setIntentExtras(receiverIntent, eventType, notificationId, extraKeys, extraBundles);
+
+    Intent[] intents;
+
+    if (launchActivityIntent != null) {
+      intents = new Intent[2];
+      intents[0] = launchActivityIntent;
+
+      receiverIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+      intents[1] = receiverIntent;
+    } else {
+      intents = new Intent[1];
+      receiverIntent.setFlags(
+        Intent.FLAG_ACTIVITY_NEW_TASK
+          | Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+          | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+      intents[0] = receiverIntent;
+    }
+
+    return intents;
+  }
+
   static void setIntentExtras(
       Intent intent,
       int eventType,

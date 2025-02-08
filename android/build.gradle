@@ -6,7 +6,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.0.3'
+    classpath 'com.android.tools.build:gradle:8.5.0'
   }
 }
 
@@ -39,6 +39,7 @@ ext {
 
 android {
   compileSdkVersion 34
+  namespace = "app.notifee.core"
   testOptions {
     unitTests.returnDefaultValues = true
   }
@@ -127,6 +128,8 @@ dependencies {
 }
 
 apply plugin: 'maven-publish'
+
+//./gradlew publish
 
 publishing {
     publications {
